@@ -418,6 +418,7 @@ class PlanningGraph():
         for n1_add_eff in n1_add_effects:
             if n1_add_eff in n2_rem_effects:
                 return True
+        # Return True if node 2's add effects present in node 1's rem effects.
         for n2_add_eff in n2_add_effects:
             if n2_add_eff in n1_rem_effects:
                 return True
@@ -438,8 +439,20 @@ class PlanningGraph():
         :param node_a2: PgNode_a
         :return: bool
         '''
-        # TODO test for Interference between nodes
-        return False
+        n1_add_effects = [node for node in node_a1.action.effect_add]
+        n2_add_effects = [node for node in node_a2.action.effect_add]
+        n1_neg_preconds = [node for node in node_a1.action.precond_neg]
+        n2_neg_preconds = [node for node in node_a2.action.precond_neg]
+
+        # Return True if node 1's add effects present in node 2's negative preconditions.
+        for n1_add_eff in n1_add_effects:
+            if n1_add_eff in n2_neg_preconds:
+                return True
+        # Return True if node 2's add effects present in node 1's negative preconditions.
+        for n2_add_eff in n2_add_effects:
+            if n2_add_eff in n1_neg_preconds:
+                return True
+        return node_a2.action.effect_add == node_a1.action.precond_neg or node_a1.action.effect_add == node_a2.action.precond_neg
 
     def competing_needs_mutex(self, node_a1: PgNode_a, node_a2: PgNode_a) -> bool:
         '''
