@@ -464,8 +464,10 @@ class PlanningGraph():
         :param node_a2: PgNode_a
         :return: bool
         '''
-
-        # TODO test for Competing Needs between nodes
+        for n1 in [node for node in node_a1.parents]:
+            for n2 in [node for node in node_a2.parents]:
+                if n1.is_mutex(n2):
+                    return True
         return False
 
     def update_s_mutex(self, nodeset: set):
