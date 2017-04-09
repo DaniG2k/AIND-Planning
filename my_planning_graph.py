@@ -532,6 +532,12 @@ class PlanningGraph():
         :return: int
         '''
         level_sum = 0
-        # TODO implement
-        # for each goal in the problem, determine the level cost, then add them together
+        # For each goal in the problem, determine the level cost, then add them together
+        processed_goals = set()
+        for goal in self.problem.goal:
+            for level, states in enumerate(self.s_levels):
+                for state in states:
+                    if state.literal == goal and not goal in processed_goals:
+                        level_sum += level
+                        processed_goals.add(goal)
         return level_sum
